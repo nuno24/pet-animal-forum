@@ -1,14 +1,20 @@
-FROM node:18
+FROM node:20
 
 WORKDIR /app
 
 COPY package*.json ./
 COPY tsconfig.json ./
+COPY prisma.config.ts ./
+COPY .env ./
 
 RUN npm install
 
-#RUN npm run build
+COPY prisma ./prisma
+
+RUN npx prisma generate --config prisma.config.ts
+
+COPY src ./src
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+CMD ["npm", "run", "dev"]
