@@ -1,4 +1,5 @@
-import { hashPassword } from '../lib/bcrypt'
+import { comparePassword, hashPassword } from '../lib/bcrypt'
+import { signToken } from '../lib/jwt'
 import { prisma } from '../lib/prisma'
 
 
@@ -30,4 +31,25 @@ export async function registerUser(data: RegisterUserData) {
   })
   
   return user
+}
+
+export async function loginUser(email: string, password: string) {
+  const user = await prisma.user.findUnique({ where: {email}})
+
+  if (!user){
+    throw new Error("Invalid credentials.")
+  }
+
+  const validUser = comparePassword(password, user.password)
+  if(!validUser){
+    throw new Error("Incorrect password.")
+  }
+
+  const token = signToken({
+    id: user.id,
+    role: user.role
+  })
+
+  return {user, token}
+
 }
