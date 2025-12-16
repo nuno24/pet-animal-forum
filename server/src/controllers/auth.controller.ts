@@ -33,8 +33,9 @@ export async function register( req: Request, res: Response) {
 
 export async function login(req: Request, res: Response) {
   try {
-    const {email, password} = req.body
-    console.log(req.body)
+    const {email, password} = req.body ?? {}
+    //console.log("Headers", req.headers)
+    console.log("Body", req.body)
 
     if(!email || !password) {
       return res.status(400).json({
