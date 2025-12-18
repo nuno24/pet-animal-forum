@@ -18,7 +18,7 @@ export default function Login() {
     
     try {
       const res = await login({email, password})
-      loginContext(res.token, res.user)
+      loginContext(res.accessToken, res.user)
       console.log(res)
       navigate("/")
     } catch (err) {

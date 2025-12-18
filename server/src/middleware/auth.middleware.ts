@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { verifyToken } from "../lib/jwt";
+import { verifyToken } from "../lib/jwt"; //fix
 import { Payload } from "@prisma/client/runtime/client";
 
 type JwtPayload = { 

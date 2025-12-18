@@ -1,5 +1,9 @@
 import { Request, Response } from "express"
 import { loginUser, registerUser } from "../services/auth.services"
+import { signAccessToken, verifyRefreshToken } from "../lib/jwt";
+import { prisma } from '../lib/prisma'
+
+
 
 export async function register( req: Request, res: Response) {
   try{
@@ -43,17 +47,17 @@ export async function login(req: Request, res: Response) {
       });
     }
 
-    const {user, token} = await loginUser(email, password)
+    const {user, accessToken, refreshToken} = await loginUser(email, password)
 
-    res.status(201).json({
-      token,
-      user: {
-        id: user.id,
-        username: user.username,
-        email: user.email,
-        role: user.role
-      }
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: false, // true for prod
+      path: "/auth/refresh",
     })
+
+    res.json({user, accessToken})
+
   } catch (err:any) {
     if(err.message === "Incorrect password."){
       return res.status(409).json({ message: err.message })
@@ -62,6 +66,43 @@ export async function login(req: Request, res: Response) {
     console.error(err)
     res.status(500).json({ message: "Internal server error" })
   }
+}
 
+export async function refresh(req: Request, res: Response) {
+  const token = req.cookies.refreshToken
+
+  if(!token) {
+    return res.sendStatus(401) //redo
+  }
+
+  try {
+    const payload = verifyRefreshToken(token) as {id: string, role: string}
+
+    const user = await prisma.user.findUnique({
+      where: { id: payload.id},
+      select: { id: true, email: true, username: true, role: true}
+    })
+
+    if(!user) {
+      return res.sendStatus(401)
+    }
+
+    const newAccessToken = signAccessToken({
+      id: payload.id,
+      role: payload.role
+    })
+
+    res.json({ accessToken: newAccessToken, user})
+
+  } catch (error) {
+    res.sendStatus(403) //redo
+  }
+
+}
+
+export function logout(req: Request, res: Response) { 
+  res.clearCookie("refreshToken", {path: '/auth/refresh'})
+
+  return res.status(200).json({ message: "Logged out" })
 
 }

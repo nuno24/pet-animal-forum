@@ -6,17 +6,21 @@ export default function Home() {
   const navigate = useNavigate()
 
   const handleLogout = () => {
-    logout
+    logout()
     navigate("/login")
   }
 
   return(
     <div>
       <h1>Home</h1>
-      <h2>User: {user.username}</h2>
-      <h2>Email: {user.email}</h2>
-      <h2>Role: {user.role}</h2>
-      <button onClick={handleLogout}>Logout</button>
+      {(!user) ? <h2>No user</h2> : 
+      <div>
+        <h2>User: {user.username}</h2>
+        <h2>Email: {user.email}</h2>
+        <h2>Role: {user.role}</h2>
+        <button onClick={handleLogout}>Logout</button>
+      </div>
+      }
     </div>
   )
 }

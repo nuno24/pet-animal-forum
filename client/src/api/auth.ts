@@ -22,6 +22,7 @@ export const login = async (data: {email: string, password: string}) => {
     const res = await fetch("http://localhost:3000/auth/login", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
+      credentials: "include",
       body: JSON.stringify(data)
     })
 

@@ -1,5 +1,5 @@
 import { comparePassword, hashPassword } from '../lib/bcrypt'
-import { signToken } from '../lib/jwt'
+import { signAccessToken, signRefreshToken } from '../lib/jwt'
 import { prisma } from '../lib/prisma'
 
 
@@ -45,11 +45,18 @@ export async function loginUser(email: string, password: string) {
     throw new Error("Incorrect password.")
   }
 
-  const token = signToken({
-    id: user.id,
-    role: user.role
-  })
+  const payload = {id: user.id, role: user.role}
 
-  return {user, token}
+  return {
+    user: {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      role: user.role,
+    },
+
+    accessToken: signAccessToken(payload),
+    refreshToken: signRefreshToken(payload)
+  }
 
 }

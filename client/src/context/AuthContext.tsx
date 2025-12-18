@@ -9,7 +9,7 @@ type User = {
 
 type AuthContextType = {
   user: User | null
-  token: string | null
+  accessToken: string | null
   loginContext: (token: string, user: User) => void
   logout: () => void
 }
@@ -18,33 +18,38 @@ const AuthContext = createContext<AuthContextType | null>(null)
 
 export function AuthProvider({children}: {children: React.ReactNode}) {
   const [user, setUser] = useState<User | null>(null)
-  const [token, setToken] = useState<string | null>(null)
+  const [accessToken, setAccessToken] = useState<string | null>(null)
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("token")
-    const storedUser = localStorage.getItem("user")
-
-    if(storedToken && storedUser) {
-      setToken(storedToken)
-      setUser(JSON.parse(storedUser))
-    }
+    fetch("http://localhost:3000/auth/refresh", {
+      method: "POST",
+      credentials: "include",
+    })
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        if (data?.accessToken) {
+          setUser(data.user)
+          setAccessToken(data.accessToken)
+        }
+      })
   }, [])
 
   function loginContext(token: string, user: User) {
-    localStorage.setItem("token", token)
-    localStorage.setItem("user", JSON.stringify(user))
-    setToken(token)
+    setAccessToken(token)
     setUser(user)
   }
 
-  function logout() {
-    localStorage.clear()
-    setToken(null)
+  async function logout() {
+    await fetch("http://localhost:3000/auth/logout", {
+      method: "POST",
+      credentials: "include",
+    })
+    setAccessToken(null)
     setUser(null)
   }
 
   return(
-    <AuthContext.Provider value={{user, token, loginContext, logout}}>
+    <AuthContext.Provider value={{user, accessToken, loginContext, logout}}>
       {children}
     </AuthContext.Provider>
   )
