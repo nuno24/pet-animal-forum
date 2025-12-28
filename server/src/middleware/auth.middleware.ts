@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { verifyToken } from "../lib/jwt"; //fix
+import { verifyAccessToken } from "../lib/jwt";
 import { Payload } from "@prisma/client/runtime/client";
 
 type JwtPayload = { 
@@ -21,7 +21,7 @@ export function requireAuth(req: Request, res: Response, next: NextFunction) {
   }
 
   try {
-    const payload = verifyToken(token) as JwtPayload
+    const payload = verifyAccessToken(token) as JwtPayload
     req.user = payload
 
     next()

@@ -11,6 +11,10 @@ export function verifyRefreshToken(token:string) {
   return jwt.verify(token, REFRESH_SECRET)
 }
 
+export function verifyAccessToken(token: string) {
+  return jwt.verify(token, ACCESS_SECRET)
+}
+
 export function signRefreshToken(payload: object) {
   return jwt.sign(payload, REFRESH_SECRET, {expiresIn: '7d'})
 }

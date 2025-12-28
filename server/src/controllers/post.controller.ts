@@ -1,0 +1,42 @@
+import { Request, Response } from "express"
+import * as postService from "../services/post.service"
+
+export async function createPost(req: Request, res:Response) {
+  const { title, content } = req.body
+  
+  if(!title || !content ) {
+    return res.status(400).json({ message: "Missing fields. "})
+  }
+
+  const post = await postService.createPost(title, content, req.user!.id)
+
+  res.status(200).json(post)
+}
+
+export async function getPosts(req: Request, res:Response) {
+  const posts = await postService.getAllPosts
+  res.json(posts)
+}
+
+export async function getPost(req: Request, res:Response) {
+  const post = await postService.getPostById(req.params.id)
+  res.json(post)
+}
+
+export async function deletePost(req: Request, res: Response) {
+  const post = await postService.getPostById(req.params.id);
+
+  if (!post) {
+    return res.status(404).json({ message: "Post not found" });
+  }
+
+  if (
+    post.authorId !== req.user!.id &&
+    req.user!.role !== "ADMIN"
+  ) {
+    return res.status(403).json({ message: "Forbidden" });
+  }
+
+  await postService.deletePost(post.id);
+  res.status(204).send();
+}
