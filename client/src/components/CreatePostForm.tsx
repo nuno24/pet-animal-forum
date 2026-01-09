@@ -17,7 +17,6 @@ const CreatePostForm = (
   }: Props
 ) => {
 
-
   return(
     <div>
       <form onSubmit={onSubmit}>

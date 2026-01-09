@@ -3,10 +3,12 @@ import { useNavigate } from "react-router-dom"
 import { getPosts, createPost } from "../api/posts"
 import { useEffect, useState } from "react"
 import CreatePostForm from "../components/CreatePostForm"
+import PostList from "../components/posts/PostList"
+import type { Post } from "../types/post"
 
 export default function Home() {
   const {user, accessToken, logout} = useAuth()
-  const [posts, setPosts] = useState([])
+  const [posts, setPosts] = useState<Post[]>([])
   const [error, setError] = useState("")
 
   const [title, setTitle] = useState("")
@@ -15,16 +17,16 @@ export default function Home() {
 
   async function fetchAllPosts() {
     const data = await getPosts()
-    setPosts(data)
+    setPosts(data as Post[])
     console.log(data)
   }
   useEffect(() => {
     (async () => {
       try{
-      await fetchAllPosts()
-    }catch(e){
-      setError(e)
-    }
+        await fetchAllPosts()
+      }catch(e){
+        setError(e instanceof Error ? e.message : String(e))
+      }
     })();
   }, [])
 
@@ -43,7 +45,7 @@ export default function Home() {
       await fetchAllPosts()
       console.log(res)
     } catch (e) {
-      setError(e.message)
+      setError(e instanceof Error ? e.message : String(e))
     }
   }
 
@@ -81,19 +83,9 @@ export default function Home() {
       <div>
         {error && <h2>{error}</h2>}
 
-        {!error && posts.length === 0 ? (
-          <h2>No posts.</h2>
-        ) : (
-          <ul>
-            {posts.map((post) => (
-              <li key={post.id}>
-                <h2>{post.title}</h2>
-                <small>{post.content}</small>
-              </li>
-            ))}
-          </ul>
-        )
-      }
+        {!error && (
+          <PostList posts={posts} />
+        )}
       </div>
 
 
