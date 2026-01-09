@@ -7,7 +7,7 @@ const router = Router()
 
 router.post("/", requireAuth, createPost)
 router.get("/", getPosts)
-router.get("/:id", getPosts)
-router.post("/:id", deletePost)
+router.get("/:id", getPosts) //requireAuth
+router.post("/:id", deletePost) //requireAuth
 
 export default router

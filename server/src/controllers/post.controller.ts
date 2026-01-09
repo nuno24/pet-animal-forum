@@ -7,6 +7,7 @@ export async function createPost(req: Request, res:Response) {
   if(!title || !content ) {
     return res.status(400).json({ message: "Missing fields. "})
   }
+  if (!req.user) return res.status(401).json({ message: "Unauthorized" });
 
   const post = await postService.createPost(title, content, req.user!.id)
 
@@ -14,7 +15,7 @@ export async function createPost(req: Request, res:Response) {
 }
 
 export async function getPosts(req: Request, res:Response) {
-  const posts = await postService.getAllPosts
+  const posts = await postService.getAllPosts()
   res.json(posts)
 }
 
