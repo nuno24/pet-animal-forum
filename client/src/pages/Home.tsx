@@ -5,6 +5,7 @@ import { useEffect, useState } from "react"
 import CreatePostForm from "../components/CreatePostForm"
 import PostList from "../components/posts/PostList"
 import type { Post } from "../types/post"
+import NavBar from "../components/NavBar"
 
 export default function Home() {
   const {user, accessToken, logout} = useAuth()
