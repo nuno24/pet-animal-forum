@@ -31,3 +31,14 @@ export const createPost = async (token: string,data: {title: string, content: st
 
     return res.json()
 }
+
+export const deletePost = async (id:string) => {
+  const res = await fetch(`http://localhost:3000/posts/${id}`, {
+    method: "DELETE"
+  })
+
+  if(!res.ok) {
+    const err = await res.json()
+    throw new Error(err.Error || "deletePost fail")
+  }
+}

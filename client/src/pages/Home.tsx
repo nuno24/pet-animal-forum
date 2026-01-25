@@ -1,6 +1,6 @@
 import { useAuth } from "../context/AuthContext"
 import { useNavigate } from "react-router-dom"
-import { getPosts, createPost } from "../api/posts"
+import { getPosts, createPost, deletePost } from "../api/posts"
 import { useEffect, useState } from "react"
 import CreatePostForm from "../components/CreatePostForm"
 import PostList from "../components/posts/PostList"
@@ -54,6 +54,15 @@ export default function Home() {
     navigate("/login")
   }
 
+  async function handleDeletePost(postId: string) {
+    try {
+      await deletePost(postId)
+      setPosts((prev) => prev.filter((post) => post.id !== postId))
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e))
+    }
+  }
+
   return(
     <div>
       <h1>Home</h1>
@@ -84,7 +93,7 @@ export default function Home() {
         {error && <h2>{error}</h2>}
 
         {!error && (
-          <PostList posts={posts} />
+          <PostList posts={posts} onDelete={handleDeletePost}/>
         )}
       </div>
 

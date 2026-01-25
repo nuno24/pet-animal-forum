@@ -18,10 +18,22 @@ const CreatePostForm = (
 ) => {
 
   return(
-    <div>
-      <form onSubmit={onSubmit}>
-        <input placeholder="Title" value={title} onChange={(e) => onTitleChange(e.target.value)}/>
-        <input placeholder="Content" value={content} onChange={(e) => onContentChange(e.target.value)}/>
+    <div className="flex justify-center items-center border p-4">
+      <form
+        className="flex flex-col items-center gap-3 w-full max-w-md"
+        onSubmit={onSubmit}>
+
+        <input 
+          className="w-full"
+          placeholder="Title" 
+          value={title} 
+          onChange={(e) => onTitleChange(e.target.value)}
+          />
+        <textarea
+          className="w-full"
+          placeholder="Content" 
+          value={content} 
+          onChange={(e) => onContentChange(e.target.value)}/>
         <button type="submit">Post</button>
       </form>
     </div>

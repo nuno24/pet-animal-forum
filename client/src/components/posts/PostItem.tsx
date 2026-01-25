@@ -1,14 +1,19 @@
 import type { Post } from "../../types/post"
 
+
 type PostItemProps = {
   post: Post
+  onDelete: (postId: string) => void
 }
 
-export default function PostItem({ post }: PostItemProps) {
+export default function PostItem({ post, onDelete }: PostItemProps) {
+
   return (
-    <li>
-      <h2>{post.title}</h2>
-      <small>{post.content}</small>
-    </li>
+    <div className="rounded-sm border bg-neutral-700 p-1 m-4">
+      <h2 className="text-2xl font-bold">{post.title}</h2>
+      <small className="text-lg">{post.content}</small>
+      <p>{post.id}</p>
+      <button onClick={() => onDelete(post.id)}>Delete</button>
+    </div>
   )
 }
