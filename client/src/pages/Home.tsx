@@ -5,7 +5,6 @@ import { useEffect, useState } from "react"
 import CreatePostForm from "../components/CreatePostForm"
 import PostList from "../components/posts/PostList"
 import type { Post } from "../types/post"
-import NavBar from "../components/NavBar"
 
 export default function Home() {
   const {user, accessToken, logout} = useAuth()
@@ -69,6 +68,7 @@ export default function Home() {
     }
   }
 
+
   return(
     <div>
       <h1>Home</h1>
@@ -96,11 +96,13 @@ export default function Home() {
       }
 
       <div>
-        {error && <h2>{error}</h2>}
+          <div>
+            {error && <h2>{error}</h2>}
 
-        {!error && (
-          <PostList posts={posts} onDelete={handleDeletePost}/>
-        )}
+            {!error && (
+              <PostList posts={posts} onDelete={handleDeletePost}/>
+            )}
+          </div>
       </div>
 
 

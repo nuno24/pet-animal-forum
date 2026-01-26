@@ -5,6 +5,7 @@ type PostListProps = {
   posts: Post[]
   emptyText?: string
   onDelete: (postId: string) => void | Promise<void>
+
 }
 
 export default function PostList({ posts, onDelete, emptyText = "No posts." }: PostListProps) {
@@ -13,7 +14,11 @@ export default function PostList({ posts, onDelete, emptyText = "No posts." }: P
   return (
     <ul>
       {posts.map((post) => (
-        <PostItem key={post.id} post={post} onDelete={onDelete}/>
+        <PostItem 
+          key={post.id} 
+          post={post} 
+          onDelete={onDelete}
+          />
       ))}
     </ul>
   )

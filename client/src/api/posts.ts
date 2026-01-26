@@ -12,6 +12,20 @@ export const getPosts = async() => {
   return res.json()
 }
 
+export const getPost = async(id: string) => {
+  const res = await fetch(`http://localhost:3000/posts/${id}`, {
+    method: "GET",
+    headers: {"Content-Type": "application/json"},
+  })
+  if(!res.ok) {
+    const err = await res.json()
+    throw new Error(err.Error || "getPost fail")
+  }
+  console.log(res)
+
+  return res.json()
+}
+
 export const createPost = async (token: string, data: {title: string, content: string}) => {
     const res = await fetch("http://localhost:3000/posts/", {
       method: "POST",
@@ -32,7 +46,7 @@ export const createPost = async (token: string, data: {title: string, content: s
     return res.json()
 }
 
-export const deletePost = async (token: string, id:string) => {
+export const deletePost = async (token: string, id: string) => {
   const res = await fetch(`http://localhost:3000/posts/${id}`, {
     method: "DELETE",
     headers: {

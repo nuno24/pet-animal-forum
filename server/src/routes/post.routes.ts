@@ -7,7 +7,7 @@ const router = Router()
 
 router.post("/", requireAuth, createPost)
 router.get("/", getPosts)
-router.get("/:id", getPost) //requireAuth
+router.get("/:id", getPost) //requireAuth // getPostById
 router.delete("/:id", requireAuth, deletePost)
 router.put("/:id", updatePost)
 
