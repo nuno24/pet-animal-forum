@@ -45,3 +45,13 @@ export async function deletePost(id: string) {
     where: { id }
   })
 }
+
+export async function updatePost(id: string, newTitle: string, newContent: string) {
+  return prisma.post.updateManyAndReturn({
+    where: {id},
+    data: {
+      title: newTitle,
+      content: newContent
+    }
+  })
+}

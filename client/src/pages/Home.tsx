@@ -56,8 +56,13 @@ export default function Home() {
   }
 
   async function handleDeletePost(postId: string) {
+    if(!accessToken) {
+      setError("You need to be logged in to create a post.")
+      return
+    }
+    setError("")
     try {
-      await deletePost(postId)
+      await deletePost(accessToken, postId)
       setPosts((prev) => prev.filter((post) => post.id !== postId))
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e))

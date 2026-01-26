@@ -18,7 +18,7 @@ const CreatePostForm = (
 ) => {
 
   return(
-    <div className="flex justify-center items-center border p-4">
+    <div className="flex justify-center items-center border p-4 m-4">
       <form
         className="flex flex-col items-center gap-3 w-full max-w-md"
         onSubmit={onSubmit}>

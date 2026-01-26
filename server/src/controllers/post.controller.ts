@@ -41,3 +41,16 @@ export async function deletePost(req: Request, res: Response) {
   await postService.deletePost(post.id);
   res.status(204).send();
 }
+
+export async function updatePost(req: Request, res: Response) {
+  const post = await postService.getPostById(req.params.id)
+  const {title, content} = req.body
+
+  if (!post) {
+    return res.status(404).json({ message: "Post not found" });
+  }
+
+  const updatedPost = await postService.updatePost(post.id, title, content)
+  res.status(200).json(updatedPost)
+
+}

@@ -7,12 +7,12 @@ export default function NavBar() {
 
   async function handleLogout() {
     await logout()
-    navigate("/Link")
+    navigate("/")
   }
 
   return(
     <nav className="sticky top-0 z-50 w-full border-b border-white/10 bg-neutral-900/80 backdrop-blur">
-      <div className="mx-auto flex max-w-5xl items-center justify-between">
+      <div className="mx-auto flex items-center justify-between p-2">
         <Link to='/' className="text-lg font-bold">PET FORUM</Link>
         {!user ? (
           <div className="flex items-center gap-2">
