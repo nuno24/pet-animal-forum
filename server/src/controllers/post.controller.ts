@@ -43,9 +43,14 @@ export async function deletePost(req: Request, res: Response) {
 }
 
 export async function updatePost(req: Request, res: Response) {
-  const post = await postService.getPostById(req.params.id)
-  const {title, content} = req.body
+  // if(!req.user) return res.status(401).json({message: "Unauthorized"})
 
+  const {title, content} = req.body
+  if(!title || !content) {
+    return res.status(400).json({message: "Fields are missing."})
+  }
+  
+  const post = await postService.getPostById(req.params.id)
   if (!post) {
     return res.status(404).json({ message: "Post not found" });
   }
