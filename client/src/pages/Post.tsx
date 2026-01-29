@@ -3,8 +3,7 @@ import { useNavigate, useParams } from "react-router-dom"
 import { deletePost, getPost, updatePost } from "../api/posts"
 import type { Post } from "../types/post"
 import { useAuth } from "../context/AuthContext"
-import { validateHeaderValue } from "http"
-import { access } from "fs"
+
 
 
 
@@ -92,6 +91,10 @@ function Post() {
   if(error) return <div>{error}</div>
   if(!post) return <div>Loading...</div>
 
+  const canDelete = user && (user.role === "ADMIN" || user.role === "MOD" || user.id == post.author?.id)
+
+  const canEdit = user && (user.role === "ADMIN" || user.id === post.author?.id)
+
   return (
     <div>
       {!isUpdating ? (
@@ -100,13 +103,17 @@ function Post() {
           <p>{post?.content}</p>
           <p>{post.author.username}</p>
           <p>{post.author.id}</p>
-          <button
-            disabled={!accessToken}
-            onClick={() => post?.id && handleDeletePost(post.id)}
-          >
-            Delete
-          </button>
-          <button onClick={handleStartEdit}>Edit</button>
+          {canDelete && 
+            <button
+              disabled={!accessToken}
+              onClick={() => post?.id && handleDeletePost(post.id)}
+            >
+              Delete
+            </button>
+          }
+          {canEdit &&
+            <button onClick={handleStartEdit}>Edit</button>
+          }
         </div>
       ) :(
         <form onSubmit={handleSubmitUpdate}>

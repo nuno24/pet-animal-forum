@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom"
 import type { Post } from "../../types/post"
+import { useAuth } from "../../context/AuthContext"
 
 
 type PostItemProps = {
@@ -8,6 +9,12 @@ type PostItemProps = {
 }
 
 export default function PostItem({ post, onDelete }: PostItemProps) {
+  const {user} = useAuth()
+
+  const canDelete = user && (user.role === "ADMIN" || user.role === "MOD" || user.id == post.author?.id)
+
+  const canEdit = user && (user.role === "ADMIN" || user.id === post.author?.id)
+
 
   return (
     <Link to={`/post/${post.id}`} className="no-underline">
@@ -15,7 +22,15 @@ export default function PostItem({ post, onDelete }: PostItemProps) {
         <h2 className="text-2xl font-bold">{post.title}</h2>
         <small className="text-lg">{post.content}</small>
         <p>{post.id}</p>
-        <button onClick={() => onDelete(post.id)}>Delete</button>
+        {canDelete && 
+          <button onClick={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            onDelete(post.id)}}
+            >
+              Delete
+          </button>
+        }
       </div>
     </Link>
   )
