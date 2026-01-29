@@ -4,14 +4,13 @@ import { signAccessToken, verifyRefreshToken } from "../lib/jwt";
 import { prisma } from '../lib/prisma'
 
 
-
 export async function register( req: Request, res: Response) {
   try{
   const {email, username, password} = req.body
 
   if (!email || !username || !password) {
     return res.status(400).json({
-      error: "Email, username and password are required",
+      message: "Email, username and password are required",
     });
   }
 
@@ -43,7 +42,7 @@ export async function login(req: Request, res: Response) {
 
     if(!email || !password) {
       return res.status(400).json({
-        error: "Email, username and password are required",
+        message: "Email, username and password are required",
       });
     }
 
@@ -88,8 +87,8 @@ export async function refresh(req: Request, res: Response) {
     }
 
     const newAccessToken = signAccessToken({
-      id: payload.id,
-      role: payload.role
+      id: user.id,
+      role: user.role
     })
 
     res.json({ accessToken: newAccessToken, user})

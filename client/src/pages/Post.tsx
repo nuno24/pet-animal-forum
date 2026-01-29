@@ -98,6 +98,8 @@ function Post() {
         <div>
           <h1>{post?.title}</h1>
           <p>{post?.content}</p>
+          <p>{post.author.username}</p>
+          <p>{post.author.id}</p>
           <button
             disabled={!accessToken}
             onClick={() => post?.id && handleDeletePost(post.id)}

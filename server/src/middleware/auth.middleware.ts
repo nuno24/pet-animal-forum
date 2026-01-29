@@ -1,23 +1,23 @@
 import { Request, Response, NextFunction } from "express";
 import { verifyAccessToken } from "../lib/jwt";
-import { Payload } from "@prisma/client/runtime/client";
+import { Role } from "@prisma/client";
 
 type JwtPayload = { 
   id: string,
-  role: "ADMIN" | "MOD" | "USER"
+  role: Role
 }
 
 export function requireAuth(req: Request, res: Response, next: NextFunction) { 
   const header = req.headers.authorization
 
   if(!header){ 
-    return res.status(401).json({error: "Missing auth header."})
+    return res.status(401).json({message: "Missing auth header."})
   }
 
   const [type, token] = header.split(" ")
 
   if(type !== "Bearer" || !token ) {
-    return res.status(401).json({ error: "Invalid authorization format." });
+    return res.status(401).json({ message: "Invalid authorization format." });
   }
 
   try {
@@ -26,7 +26,7 @@ export function requireAuth(req: Request, res: Response, next: NextFunction) {
 
     next()
   } catch (err) {
-    return res.status(401).json({ error: "Invalid or expired token." });
+    return res.status(401).json({ message: "Invalid or expired token." });
   }
 
 
