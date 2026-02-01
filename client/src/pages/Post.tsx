@@ -91,9 +91,9 @@ function Post() {
   if(error) return <div>{error}</div>
   if(!post) return <div>Loading...</div>
 
-  const canDelete = user && (user.role === "ADMIN" || user.role === "MOD" || user.id == post.author?.id)
+  const canDelete = !!user && (user.role === "ADMIN" || user.role === "MOD" || user.id === post.authorId)
 
-  const canEdit = user && (user.role === "ADMIN" || user.id === post.author?.id)
+  const canEdit = !!user && (user.role === "ADMIN" || user.id === post.authorId)
 
   return (
     <div>
@@ -102,7 +102,7 @@ function Post() {
           <h1>{post?.title}</h1>
           <p>{post?.content}</p>
           <p>{post.author.username}</p>
-          <p>{post.author.id}</p>
+          <p>{post.authorId}</p>
           {canDelete && 
             <button
               disabled={!accessToken}

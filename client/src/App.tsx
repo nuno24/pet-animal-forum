@@ -5,6 +5,7 @@ import Register from './pages/Register'
 import Home from './pages/Home'
 import NavBar from './components/NavBar'
 import Post from './pages/Post'
+import CreatePost from './pages/CreatePost'
 
 function App() {
 
@@ -15,6 +16,7 @@ function App() {
         <Route path='/' element={<Home />}/>
         <Route path='/login' element={<Login />}/>
         <Route path='/register' element={<Register />}/>
+        <Route path='/create-post' element={<CreatePost />}/>
         <Route path='/post/:id' element={<Post />}/>
       </Routes>
     </BrowserRouter>

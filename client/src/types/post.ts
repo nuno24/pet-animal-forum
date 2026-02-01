@@ -4,6 +4,7 @@ export type Post = {
   content: string
   createdAt: string
   updatedAt: string
+  authorId: string
   author?: {
     id: string
     username: string

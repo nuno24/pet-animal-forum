@@ -1,25 +1,20 @@
 import { useAuth } from "../context/AuthContext"
-import { useNavigate } from "react-router-dom"
-import { getPosts, createPost, deletePost } from "../api/posts"
+import { getPosts, deletePost } from "../api/posts"
 import { useEffect, useState } from "react"
-import CreatePostForm from "../components/CreatePostForm"
 import PostList from "../components/posts/PostList"
 import type { Post } from "../types/post"
 
 export default function Home() {
-  const {user, accessToken, logout} = useAuth()
+  const {user, accessToken} = useAuth()
   const [posts, setPosts] = useState<Post[]>([])
   const [error, setError] = useState("")
-
-  const [title, setTitle] = useState("")
-  const [content, setContent] = useState("")
-  const navigate = useNavigate()
 
   async function fetchAllPosts() {
     const data = await getPosts()
     setPosts(data as Post[])
     console.log(data)
   }
+
   useEffect(() => {
     (async () => {
       try{
@@ -29,30 +24,6 @@ export default function Home() {
       }
     })();
   }, [])
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    if(!accessToken) {
-      setError("You need to be logged in to create a post.")
-      return
-    }
-    setError("")
-
-    try {
-      const res = await createPost(accessToken, {title, content})
-      setTitle("")
-      setContent("")
-      await fetchAllPosts()
-      console.log(res)
-    } catch (e) {
-      setError(e instanceof Error ? e.message : String(e))
-    }
-  }
-
-  const handleLogout = () => {
-    logout()
-    navigate("/login")
-  }
 
   async function handleDeletePost(postId: string) {
     if(!accessToken) {
@@ -81,16 +52,7 @@ export default function Home() {
             <h2>Email: {user.email}</h2>
             <h2>Role: {user.role}</h2>
             <h2>ID: {user.id}</h2>
-            <button onClick={handleLogout}>Logout</button>
           </div>
-
-        <CreatePostForm 
-          title={title}
-          content={content}
-          onTitleChange={setTitle}
-          onContentChange={setContent}
-          onSubmit={handleSubmit}
-        />
         </div>
       )
       }

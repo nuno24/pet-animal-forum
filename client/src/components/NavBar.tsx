@@ -20,7 +20,8 @@ export default function NavBar() {
             <Link to='/register'>REGISTER</Link>
           </div>
         ):(
-          <div className="flex items-center gap-3"> 
+          <div className="flex items-center gap-3">
+            <Link to='/create-post'>Create</Link>
             <span className="text-xl text-neutral-200">{user.username}</span>
             <button onClick={handleLogout}>LOGOUT</button>
           </div>

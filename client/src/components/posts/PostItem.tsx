@@ -9,12 +9,9 @@ type PostItemProps = {
 }
 
 export default function PostItem({ post, onDelete }: PostItemProps) {
-  const {user} = useAuth()
+  const { user } = useAuth()
 
-  const canDelete = user && (user.role === "ADMIN" || user.role === "MOD" || user.id == post.author?.id)
-
-  const canEdit = user && (user.role === "ADMIN" || user.id === post.author?.id)
-
+  const canDelete = !!user && (user.role === "ADMIN" || user.role === "MOD" || user.id === post.authorId)
 
   return (
     <Link to={`/post/${post.id}`} className="no-underline">
